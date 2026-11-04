@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10151b">
+    <title>Vigía — detector de movimiento</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Vigía, inicio">
+          <span class="brand-mark" aria-hidden="true">V</span>
+          <span>vigía<span class="brand-dot">.</span></span>
+        </a>
+        <div class="local-badge"><span></span> PROCESAMIENTO LOCAL</div>
+      </header>
+
+      <section class="intro">
+        <div>
+          <p class="eyebrow">MONITOREO INTELIGENTE</p>
+          <h1>Tu espacio, <span>bajo control.</span></h1>
+          <p class="intro-copy">Detectá movimiento en tiempo real y mirá qué aparece frente a tu cámara.</p>
+        </div>
+        <div class="live-indicator" id="liveIndicator"><span></span><span id="liveLabel">Cámara apagada</span></div>
+      </section>
+
+      <section class="dashboard">
+        <div class="main-column">
+          <article class="camera-card">
+            <div class="camera-toolbar">
+              <div class="camera-title"><span class="camera-icon" aria-hidden="true">◉</span><div><strong>Cámara en vivo</strong><small id="cameraSubtext">Vista previa local</small></div></div>
+              <div class="motion-state" id="motionState"><span></span><span id="motionLabel">En espera</span></div>
+            </div>
+            <div class="camera-stage" id="cameraStage">
+              <video id="video" autoplay playsinline muted></video>
+              <canvas id="overlay" aria-label="Recuadros de detección"></canvas>
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <div class="placeholder-icon" aria-hidden="true">⌁</div>
+                <strong>Tu cámara te espera</strong>
+                <span>Activala para empezar a monitorear</span>
+              </div>
+              <div class="camera-corner top-left"></div><div class="camera-corner top-right"></div>
+              <div class="camera-corner bottom-left"></div><div class="camera-corner bottom-right"></div>
+              <div class="frame-chip" id="frameChip" hidden><span></span> LIVE</div>
+            </div>
+            <div class="camera-controls">
+              <button class="button button-primary" id="startButton" type="button"><span aria-hidden="true">▶</span> Activar cámara</button>
+              <button class="button button-stop" id="stopButton" type="button" disabled><span aria-hidden="true">■</span> Detener</button>
+              <span class="control-hint">Se analiza un cuadro cada medio segundo</span>
+            </div>
+          </article>
+
+          <article class="activity-card">
+            <div class="section-heading">
+              <div><p class="eyebrow">SEGUIMIENTO</p><h2>Actividad reciente</h2></div>
+              <button class="text-button" id="clearEventsButton" type="button">Limpiar</button>
+            </div>
+            <div class="event-list" id="eventList">
+              <div class="empty-state" id="emptyState">
+                <span aria-hidden="true">◷</span>
+                <div><strong>Todo tranquilo por acá</strong><small>Los eventos detectados van a aparecer en esta lista.</small></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="side-column">
+          <article class="settings-card">
+            <div class="section-heading compact">
+              <div><p class="eyebrow">AJUSTES</p><h2>Detección</h2></div>
+              <span class="settings-icon" aria-hidden="true">⚙</span>
+            </div>
+            <label class="sensitivity-label" for="sensitivity">
+              <span>Sensibilidad</span><strong><span id="sensitivityValue">50</span>%</strong>
+            </label>
+            <input id="sensitivity" type="range" min="0" max="100" value="50">
+            <div class="range-labels"><span>Menos sensible</span><span>Más sensible</span></div>
+            <div class="divider"></div>
+            <p class="detect-heading">Se detecta</p>
+            <div class="detect-option"><span class="legend-dot person-dot"></span><span>Personas</span><span class="option-tag">IA</span></div>
+            <div class="detect-option"><span class="legend-dot motion-dot"></span><span>Movimiento</span><span class="option-tag">CV</span></div>
+            <p class="settings-note">La detección de personas usa el modelo HOG incluido en OpenCV. No se envían imágenes a internet.</p>
+          </article>
+
+          <article class="stats-card">
+            <p class="eyebrow">ESTA SESIÓN</p>
+            <div class="stat-row"><div><span class="stat-icon amber">✳</span><span>Eventos guardados</span></div><strong id="eventCount">0</strong></div>
+            <div class="stat-row"><div><span class="stat-icon green">⌁</span><span>Estado de cámara</span></div><strong class="stat-state" id="cameraStat">Inactiva</strong></div>
+          </article>
+
+          <div class="privacy-note"><span aria-hidden="true">◈</span><span><strong>Privado por diseño</strong><br>El video permanece en tu dispositivo y solo se procesa en esta computadora.</span></div>
+        </aside>
+      </section>
+      <footer>VIGÍA <span>·</span> Detector local de movimiento</footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
