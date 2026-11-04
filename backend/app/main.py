@@ -11,7 +11,7 @@ from app.vision.pipeline import VisionPipeline
 app = FastAPI(title="Detector de movimiento", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5500", "http://127.0.0.1:5500"],
+    allow_origins=["*"],
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
 )

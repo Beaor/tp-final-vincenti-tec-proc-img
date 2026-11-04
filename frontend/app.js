@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "";
 const frameCanvas = document.createElement("canvas");
 const frameContext = frameCanvas.getContext("2d", { willReadFrequently: true });
 const video = document.getElementById("video");
