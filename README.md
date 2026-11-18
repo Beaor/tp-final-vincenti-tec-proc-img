@@ -1,3 +1,58 @@
+# Materia
+Técnicas de Procesamiento Digital de Imágenes
+
+# Año y cuatrimestre de cursada
+2 do año - segundo cuatrimestre
+
+# Nombre y apellido
+Abel Pablo Vincenti
+
+# Docente
+Juan Ignacio Bonini
+
+# Que los motivo a crear lo que crearon
+Inicialmente iba a hacer un motion detector con imagenes crudas y en distintos colores, y despues de una charla en una clase presencial y con la guía del profesor, decídi hacer un full motion detector que a futuro, cuando me compre un par de camaras,  lo instalaré en un servidor propio para usarlo en la oficina laboral y en mi casa
+
+# Que problemáticas encontraron y como las resolvieron
+Al principio algunas cosas parecían errores de la cámara, pero al revisar el recorrido completo vimos que también podían fallar el navegador, el frontend o el backend. Estas fueron las principales dificultades y cómo las fui resolviendo:
+
+### 1. El backend no respondía
+
+**Qué pasaba:** la página podía abrirse, pero al analizar una imagen aparecía un error de conexión. El navegador enviaba los cuadros a la API local, que no estaba iniciada o no estaba disponible.
+
+**Cómo lo resolví:** comprobé que se estaba ejecutando en el puerto correcto y agregué una ruta sencilla, `/api/health`, para verificar si respondía. Cuando algo así pasa, conviene revisar primero la terminal del backend y probar `http://127.0.0.1:8000/api/health`; si no responde, el problema está antes de la detección de movimiento.
+
+### 2. Se estaba usando el Python equivocado
+
+**Qué pasaba:** Uvicorn podía arrancar con una instalación global de Python, distinta del entorno virtual del proyecto. En ese caso OpenCV no tenía disponible `HOGDescriptor`, necesario para detectar personas.
+
+**Cómo lo resolví:** activé el entorno virtual de `backend` e inicie Uvicorn desde ahí con `python -m uvicorn`. Para evitar confusiones, antes de investigar el algoritmo revisaría qué Python ejecuta el servidor y si desde ese mismo entorno se pueden importar las dependencias.
+
+### 3. Un error de análisis apagaba la cámara
+
+**Qué pasaba:** si fallaba una solicitud al backend, el frontend detenía la cámara aunque el problema fuera solamente la conexión o el análisis.
+
+**Cómo lo resolví:** separé el error de análisis de la acción de apagar la cámara. Ahora se informa el error y se vuelve a intentar con los cuadros siguientes; la cámara se detiene cuando se usa el botón **Detener**. Al depurar algo parecido, revisaría qué función se llama al producirse el error y evitaría que un fallo recuperable cierre recursos que todavía funcionan.
+
+### 4. La dirección del backend mostraba «Not Found» o no conectaba
+
+**Qué pasaba:** la raíz `http://127.0.0.1:8000/` no es una página web, y además el servidor puede estar apagado. Son situaciones distintas: una ruta que no existe puede dar 404; un servidor apagado suele dar un error de conexión.
+
+**Cómo lo resolví:** puse qué dirección corresponde a cada cosa: el frontend se abre en el puerto 5500, la API se comprueba en `/api/health` y su documentación está en `/docs`. Cuando aparece un error, primero miraría la URL completa y el estado del servidor antes de cambiar código.
+
+### 5. El primer cuadro no detecta movimiento
+
+**Qué pasaba:** para saber qué cambió, el detector necesita comparar dos cuadros. El primero no tiene con qué compararse.
+
+**Cómo lo resolví:** usé el primer cuadro de cada sesión como referencia y empezé a buscar movimiento a partir del siguiente. Si al activar la cámara no aparece una detección de inmediato, eso es esperado; probaría moviendo algo frente a la cámara y revisaría la sensibilidad.
+
+
+# link a github
+https://github.com/Beaor/tp-final-vincenti-tec-proc-img
+
+# link a vercel
+https://tp-final-vincenti-tec-proc-img-back.vercel.app/
+
 # Vigía — detector de movimiento con cámara
 
 Aplicación local de visión por computadora para mostrar una cámara en vivo, detectar cambios entre cuadros y marcar personas cuando coinciden con una zona en movimiento. Está separada en un frontend web y un backend Python con FastAPI y OpenCV.
